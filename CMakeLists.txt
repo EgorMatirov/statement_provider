@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 
 include(${CMAKE_SOURCE_DIR}/system-config.cmake OPTIONAL)
+include(FindPkgConfig)
 
 project(bacs_statement_provider)
 
@@ -34,7 +35,9 @@ bunsan_add_executable(${PROJECT_NAME}_web
 bunsan_use_target(${PROJECT_NAME}_web ${PROJECT_NAME})
 bunsan_use_bunsan_package(${PROJECT_NAME}_web bunsan_pm bunsan_pm)
 bunsan_use_bunsan_package(${PROJECT_NAME}_web bunsan_web bunsan_web)
-bunsan_use_package(${PROJECT_NAME}_web Botan)
+pkg_check_modules(BOTAN botan-2)
+target_include_directories(${PROJECT_NAME} PUBLIC ${BOTAN_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${BOTAN_LIBRARIES})
 bunsan_use_package(${PROJECT_NAME}_web CppCMS)
 
 bunsan_install_headers()
